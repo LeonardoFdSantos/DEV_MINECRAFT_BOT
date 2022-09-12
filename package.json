@@ -12,7 +12,10 @@
     "config": "^3.3.3",
     "fs": "0.0.1-security",
     "mineflayer": "^2.37.1",
+    "mineflayer-auto-eat": "^2.3.3",
     "mineflayer-blockfinder": "0.0.7",
-    "mineflayer-cmd": "^1.0.2"
+    "mineflayer-cmd": "^1.0.2",
+    "mineflayer-pathfinder": "^2.3.3",
+    "prismarine-viewer": "^1.23.0"
   }
 }

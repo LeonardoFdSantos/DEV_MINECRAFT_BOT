@@ -1,4 +1,9 @@
 const mineflayer = require('mineflayer')
+const pathfinder = require('mineflayer-pathfinder').pathfinder
+const Movements = require('mineflayer-pathfinder').Movements
+const { GoalNear } = require('mineflayer-pathfinder').goals
+const { mineflayer: mineflayerViewer } = require('prismarine-viewer')
+const autoeat = require("mineflayer-auto-eat")
 const cmd = require('mineflayer-cmd').plugin
 const fs = require('fs');
 let rawdata = fs.readFileSync('config.json');
@@ -19,13 +24,15 @@ var bot = mineflayer.createBot({
   host: host,
   username: username
 });
+
 function getRandomArbitrary(min, max) {
        return Math.random() * (max - min) + min;
 
 }
 
 bot.loadPlugin(cmd)
-
+bot.loadPlugin(pathfinder)
+bot.loadPlugin(autoeat)
 
 bot.on('login',function(){
 	console.log("Logged In");
@@ -64,6 +71,37 @@ bot.on('time', function(time) {
     }
 });
 
+bot.once('spawn', () => {
+    const mcData = require('minecraft-data')(bot.version)
+  
+    const defaultMove = new Movements(bot, mcData)
+    
+    bot.on('chat', function(username, message) {
+    
+      if (username === bot.username) return
+  
+      const target = bot.players[username] ? bot.players[username].entity : null
+      if (message === 'VemBoT') {
+        if (!target) {
+          bot.chat('E não te vejo! Preciso te ver pra isso!')
+          return
+        }
+        const p = target.position
+  
+        bot.pathfinder.setMovements(defaultMove)
+        bot.pathfinder.setGoal(new GoalNear(p.x, p.y, p.z, 1))
+      } 
+    })
+
+    bot.autoEat.options.priority = "foodPoints"
+    bot.autoEat.options.bannedFood = ["golden_apple", "enchanted_golden_apple", "rotten_flesh"]
+    bot.autoEat.options.eatingTimeout = 3
+  })
+
+bot.once('spawn', () => {
+mineflayerViewer(bot, { port: 3007, firstPerson: true }) // port is the minecraft server port, if first person is false, you get a bird's-eye view
+})
+
 bot.on('spawn',function() {
     connected=1;
 });
@@ -71,4 +109,18 @@ bot.on('spawn',function() {
 bot.on('death',function() {
     bot.emit("respawn")
 });
+
+bot.on("autoeat_started", () => {
+  console.log("Auto Eat started!")
+})
+
+bot.on("autoeat_stopped", () => {
+  console.log("Auto Eat stopped!")
+})
+
+bot.on("health", () => {
+  if (bot.food === 20) bot.autoEat.disable()
+  // Disable the plugin if the bot is at 20 food points
+  else bot.autoEat.enable() // Else enable the plugin again
+})
 
