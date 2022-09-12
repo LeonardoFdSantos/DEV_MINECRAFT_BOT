@@ -29,9 +29,9 @@ bot.loadPlugin(cmd)
 
 
 bot.on('login',function(){
-	console.log("Logged In")
-    time
-	bot.chat("24_7h");
+	console.log("Logged In");
+    setTimeout(2000);
+	bot.chat("Online 24/7h");
 });
 
 bot.on('time', function(time) {
