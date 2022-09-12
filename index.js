@@ -27,10 +27,8 @@ function getRandomArbitrary(min, max) {
 bot.loadPlugin(cmd)
 
 
-
 bot.on('login',function(){
 	console.log("Logged In");
-    setTimeout(2000);
 	bot.chat("Online 24/7h");
 });
 
@@ -42,7 +40,7 @@ bot.on('time', function(time) {
     if (connected <1) {
         return;
     }
-    if (lasttime<0) {
+    if (lasttime<5) {
         lasttime = bot.time.age;
     } else {
         var randomadd = Math.random() * maxrandom * 20;
