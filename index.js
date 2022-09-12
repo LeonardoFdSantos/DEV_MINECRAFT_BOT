@@ -9,7 +9,7 @@ var connected = 0;
 var actions = [ 'forward', 'back', 'left', 'right']
 var lastaction;
 var pi = 3.14159;
-var moveinterval = 2; // 2 second movement interval
+var moveinterval = 5; // 2 second movement interval
 var maxrandom = 5; // 0-5 seconds added to movement interval (randomly)
 var host = data["ip"];
 var username = data["name"]
@@ -30,7 +30,8 @@ bot.loadPlugin(cmd)
 
 bot.on('login',function(){
 	console.log("Logged In")
-	bot.chat("hello");
+    time
+	bot.chat("24_7h");
 });
 
 bot.on('time', function(time) {
